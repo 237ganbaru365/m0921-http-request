@@ -3,8 +3,6 @@ const postSection = document.querySelector("#single-post");
 const form = document.querySelector("#new-post form");
 const fetchButton = document.querySelector("#available-posts button");
 const postList = document.querySelector("ul");
-// const delBtn = document.querySelector("#single-post button");
-// console.log(delBtn);
 
 function sendHTTPRequest(method, url, data) {
   const response = fetch(url, {
@@ -62,25 +60,16 @@ form.addEventListener("submit", (e) => {
   createPost(enteredTitle, enteredContent);
 });
 
-async function deletePost() {
-  const post = {
-    id: this.id,
-    title: this.querySelector("h2").value,
-    content: this.querySelector("p").value,
-  };
-  const deleteData = await sendHTTPRequest(
-    "DELETE",
-    "https://jsonplaceholder.typicode.com/posts",
-    post
-  );
-  console.log("Delete Success!");
-}
+postList.addEventListener("click", function (e) {
+  if (e.target.tagName === "BUTTON") {
+    console.log(e.tartet.closest("li"));
+    const postToDelete = e.tartet.closest("li");
 
-// delBtn.addEventListener("click", (e) => {
-//   e.preventDefault();
-//   const selectedId = e.currentTarget.id;
-//   const selectedTitle = e.currentTarget.querySelector("h2").value;
-//   const selectedContent = e.currentTarget.querySelector("p").value;
+    const result = await sendHTTPRequest(
+      "DELETE",
+      "https://jsonplaceholder.typicode.com/posts/" + postToDelete.id
+    );
 
-//   deletePost(selectedId, selectedTitle, selectedContent);
-// });
+    this.removeChild(postToDelete);
+  }
+});
